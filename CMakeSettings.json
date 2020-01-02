@@ -9,7 +9,7 @@
       "installRoot": "${projectDir}\\out\\install\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
-      "ctestCommandArgs": "",
+      "ctestCommandArgs": "--output-on-failure",
       "variables": []
     },
     {
@@ -20,7 +20,7 @@
       "installRoot": "${projectDir}\\out\\install\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
-      "ctestCommandArgs": "",
+      "ctestCommandArgs": "--output-on-failure",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "variables": []
     }

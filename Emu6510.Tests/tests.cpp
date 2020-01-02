@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <string>
 #include <utility>
@@ -33,7 +34,7 @@ int main(int argc, char** argv) {
 		}
 		test_group = test_group->next;
 	}
-	return 0;
+	return 1;
 }
 
 #define TEST_CONTEXT
