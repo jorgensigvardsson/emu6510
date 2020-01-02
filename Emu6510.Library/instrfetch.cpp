@@ -3,6 +3,7 @@
 #include "memory.h"
 #include "instructions.h"
 #include "cpu.h"
+#include "opcodes.h"
 
 namespace {
 	using namespace emu6510;

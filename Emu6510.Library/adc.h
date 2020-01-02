@@ -10,27 +10,19 @@ namespace emu6510 {
 	struct adc : instruction {
 		void execute(cpu& cpu, memory& memory) const noexcept override {
 			const auto operand = static_cast<const T*>(this)->read_operand(cpu, memory);
-			const auto result = static_cast<uint8_t>(cpu.a + operand.first + (cpu.status & status::carry ? 1 : 0));
-			const auto next_zero = result == 0;
+			const auto result = cpu.a + operand.first + (cpu.status & status::carry ? 1 : 0);
+			const auto next_zero = (result & UINT8_MAX) == 0;
+			const auto next_carry = result > UINT8_MAX;
+			const auto next_overflow = cpu.a <= INT8_MAX && result > INT8_MAX;
+			const auto next_negative = (result & byte_sign_bit) != 0;
 
-			if (next_zero) {
-				set_status_bit_value(cpu, status::zero, true);
-				set_status_bit_value(cpu, status::carry, false);
-				set_status_bit_value(cpu, status::overflow, false);
-				set_status_bit_value(cpu, status::negative, false);
-			} else {
-				const auto next_carry = result > UINT8_MAX;
-				const auto next_overflow = cpu.a <= INT8_MAX && result > INT8_MAX;
-				const auto next_negative = (result & byte_sign_bit) != 0;
-
-				set_status_bit_value(cpu, status::carry, next_carry);
-				set_status_bit_value(cpu, status::overflow, next_overflow);
-				set_status_bit_value(cpu, status::negative, next_negative);
-				set_status_bit_value(cpu, status::zero, false);
-			}
+			set_status_bit_value(cpu, status::carry, next_carry);
+			set_status_bit_value(cpu, status::overflow, next_overflow);
+			set_status_bit_value(cpu, status::negative, next_negative);
+			set_status_bit_value(cpu, status::zero, next_zero);
 
 			cpu.cycle_counter += operand.second;
-			cpu.a = result;
+			cpu.a = static_cast<uint8_t>(result);
 		}
 	};
 

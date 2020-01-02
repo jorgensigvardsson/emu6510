@@ -1,6 +1,5 @@
 #pragma once
 #include "api.h"
-#include "opcodes.h"
 
 namespace emu6510 {
 	class memory;

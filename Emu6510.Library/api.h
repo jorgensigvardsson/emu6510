@@ -1,7 +1,7 @@
 #pragma once
 
-#ifdef DLL_IMPORT
-#define API __declspec(dllimport)
-#else
+#ifdef EMU6510LIBRARY_EXPORTS
 #define API __declspec(dllexport)
+#else
+#define API __declspec(dllimport)
 #endif

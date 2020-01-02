@@ -13,52 +13,58 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\instructions">
+      <UniqueIdentifier>{9967d644-13af-490d-95e2-ec956163304e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\hw">
+      <UniqueIdentifier>{d807f3b3-a0d8-4e17-b864-a2cae16587f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hw">
+      <UniqueIdentifier>{32e88e3b-1b41-4b10-851c-4a8b58abd9d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="adc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="api.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="adc.h">
+      <Filter>Header Files\instructions</Filter>
+    </ClInclude>
     <ClInclude Include="beq.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bits.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cpu.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\instructions</Filter>
     </ClInclude>
     <ClInclude Include="inc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="instrfetch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="instruction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="instructions.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\instructions</Filter>
     </ClInclude>
     <ClInclude Include="lda.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="memory.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\instructions</Filter>
     </ClInclude>
     <ClInclude Include="nop.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="instruction.h">
+      <Filter>Header Files\instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="instructions.h">
+      <Filter>Header Files\instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="cpu.h">
+      <Filter>Header Files\hw</Filter>
+    </ClInclude>
+    <ClInclude Include="memory.h">
+      <Filter>Header Files\hw</Filter>
+    </ClInclude>
+    <ClInclude Include="instrfetch.h">
+      <Filter>Header Files\hw</Filter>
     </ClInclude>
     <ClInclude Include="opcodes.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="bits.h">
+      <Filter>Header Files\hw</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -69,10 +75,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="instrfetch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="instruction.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\hw</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -24,5 +24,13 @@ namespace emu6510 {
 
 			return hibyte << 8 | lobyte;
 		}
+
+		using iterator = std::vector<uint8_t>::iterator;
+		using const_iterator = std::vector<uint8_t>::const_iterator;
+
+		iterator begin() { return m_buffer.begin(); }
+		iterator end() { return m_buffer.end(); }
+		const_iterator begin() const { return m_buffer.begin(); }
+		const_iterator end() const { return m_buffer.end(); }
 	};
 }
