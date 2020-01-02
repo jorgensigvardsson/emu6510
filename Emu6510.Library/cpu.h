@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include "memory.h"
 
 namespace emu6510 {
 	namespace status {

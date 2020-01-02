@@ -65,7 +65,7 @@ namespace emu6510 {
 
 	struct lda_ind_x : lda<lda_ind_x> {
 		std::pair<uint8_t, int> read_value(cpu& cpu, const memory& memory) const {
-			const auto zp_ptr = read_ip_byte(cpu, memory) + cpu.x;
+			const auto zp_ptr = static_cast<uint16_t>(read_ip_byte(cpu, memory) + cpu.x);
 			const auto effective_ptr = memory.read_word(zp_ptr);
 			return std::make_pair(memory[effective_ptr], 6);
 		}

@@ -1,7 +1,7 @@
 ﻿// Emu6510.Application.cpp : Defines the entry point for the application.
 //
 
-#include "application.h"
+#include "pch.h"
 #include "../Emu6510.Library/memory.h"
 #include "../Emu6510.Library/cpu.h"
 #include "../Emu6510.Library/instrfetch.h"
@@ -18,7 +18,7 @@ void load_application(emu6510::memory& memory) {
 	memory[0xFFFD] = 0x08;
 }
 
-int main(int argc, char** argv)
+int main()
 {
 	auto memory = emu6510::memory(64 * 1024);
 	load_application(memory);

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "instrfetch.h"
 #include "memory.h"
 #include "instructions.h"

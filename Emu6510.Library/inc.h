@@ -1,6 +1,7 @@
 #pragma once
 #include "instruction.h"
 #include "cpu.h"
+#include "bits.h"
 
 namespace emu6510 {
 	// INC
@@ -26,26 +27,3 @@ namespace emu6510 {
 	struct inc_abs : inc<inc_abs, 6> { uint16_t ptr(cpu& cpu, const memory& memory) const { return read_ip_word(cpu, memory); } };
 	struct inc_abs_x : inc<inc_abs_x, 7> { uint16_t ptr(cpu& cpu, const memory& memory) const { return read_ip_word(cpu, memory) + cpu.x; } };
 }
-
-#ifdef TEST_CONTEXT
-test_group inc_test_group {
-	"INC instructions",
-	{
-		test {
-			"ZP addressing",
-			[]() {
-				auto memory = emu6510::memory(64 * 1024);
-				memory[0x0000] = emu6510::opcodes::inc_zp;
-				memory[0x0001] = 0xA0;
-				memory[0x00A0] = 123;
-
-				auto cpu = emu6510::cpu();
-				auto& instruction = fetch(cpu, memory);
-				instruction.execute(cpu, memory);
-
-				assert_eq(124ui8, memory[0x00A0]);
-			}
-		}
-	}
-};
-#endif

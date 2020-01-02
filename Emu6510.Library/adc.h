@@ -2,6 +2,7 @@
 #include <utility>
 #include "instruction.h"
 #include "cpu.h"
+#include "bits.h"
 
 namespace emu6510 {
 	// ADC
@@ -9,7 +10,7 @@ namespace emu6510 {
 	struct adc : instruction {
 		void execute(cpu& cpu, memory& memory) const noexcept override {
 			const auto operand = static_cast<const T*>(this)->read_operand(cpu, memory);
-			const auto result = cpu.a + operand.first + (cpu.status & status::carry ? 1 : 0);
+			const auto result = static_cast<uint8_t>(cpu.a + operand.first + (cpu.status & status::carry ? 1 : 0));
 			const auto next_zero = result == 0;
 
 			if (next_zero) {
@@ -76,7 +77,7 @@ namespace emu6510 {
 
 	struct adc_ind_x : adc<adc_ind_x> {
 		std::pair<uint8_t, int> read_operand(cpu& cpu, const memory& memory) const {
-			const auto zp_ptr = read_ip_byte(cpu, memory) + cpu.x;
+			const auto zp_ptr = static_cast<uint16_t>(read_ip_byte(cpu, memory) + cpu.x);
 			const auto effective_ptr = memory.read_word(zp_ptr);
 			return std::make_pair(memory[effective_ptr], 6);
 		}

@@ -12,5 +12,6 @@ namespace emu6510 {
 		const int ptr;
 
 		bad_instruction(int ptr) : ptr{ ptr } {  }
+
 	};
 }
