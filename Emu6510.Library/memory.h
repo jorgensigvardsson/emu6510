@@ -11,8 +11,6 @@ namespace emu6510 {
 			m_buffer.resize(memory_size);
 		}
 
-		size_t size() const { return m_buffer.size(); }
-
 		uint8_t& operator[](int index) {
 			return m_buffer[index];
 		}

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Emu6510.Debugger.Application": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

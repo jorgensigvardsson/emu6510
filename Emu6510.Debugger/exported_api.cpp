@@ -26,12 +26,11 @@ dbg_result dbg_load_program(debugger_t debugger, uint16_t memory_offset, const u
 
 	auto dbg = static_cast<emu6510::debugger*>(debugger);
 
-	size_t last_program_address = program_length;
-	last_program_address += memory_offset;
-	if (last_program_address > dbg->memory.size())
+	const auto memory_iterator = std::begin(dbg->memory) + memory_offset;
+	if(memory_iterator + program_length > std::end(dbg->memory))
 		return DBG_E_BAD_ARGUMENT;
 
-	memcpy(&dbg->memory[memory_offset], program, program_length);
+	std::copy(program, program + program_length, memory_iterator);
 
 	// Setup CPU for running the program
 	dbg->cpu = emu6510::cpu {};
@@ -39,15 +38,6 @@ dbg_result dbg_load_program(debugger_t debugger, uint16_t memory_offset, const u
 	dbg->cpu.pc = memory_offset;
 
 	return DBG_E_SUCCESS;
-}
-
-dbg_result dbg_get_memory_size(debugger_t debugger, uint16_t* memory_size) {
-	CHECK_NULL_ARG(debugger);
-	CHECK_NULL_ARG(memory_size);
-
-	const auto dbg = static_cast<emu6510::debugger*>(debugger);
-	*memory_size = static_cast<uint16_t>(dbg->memory.size());
-	return DBG_E_SUCCESS;	
 }
 
 dbg_result dbg_get_memory_ptr(debugger_t debugger, void** ptr) {
@@ -74,3 +64,9 @@ dbg_result dbg_step_one_instruction(debugger_t debugger) {
 	}
 }
 
+void dbg_destroy(debugger_t debugger) {
+	if (debugger == nullptr)
+		return;
+
+	delete static_cast<emu6510::debugger*>(debugger);
+}
