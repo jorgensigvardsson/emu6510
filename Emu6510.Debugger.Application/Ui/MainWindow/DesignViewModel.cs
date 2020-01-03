@@ -2,6 +2,7 @@
 {
     public class DesignViewModel : IViewModel
     {
-        public string Label { get; } = "Design time";
+        public CodeView.IViewModel Code { get; } = new CodeView.DesignViewModel();
+        public ProcessorView.IViewModel Processor { get; } = new ProcessorView.DesignViewModel();
     }
 }

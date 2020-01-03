@@ -2,6 +2,7 @@
 {
     public interface IViewModel
     {
-        string Label { get; }
+        CodeView.IViewModel Code { get; }
+        ProcessorView.IViewModel Processor { get; }
     }
 }

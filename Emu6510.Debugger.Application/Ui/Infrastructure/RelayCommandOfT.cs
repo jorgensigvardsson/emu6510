@@ -7,14 +7,14 @@ namespace Emu6510.Debugger.Application.Ui.Infrastructure
     {
         private readonly Action<T> m_execute;
 
-        private readonly Predicate<T> m_canExecute;
+        private readonly Predicate<T>? m_canExecute;
 
         public RelayCommand(Action<T> execute)
             : this(execute, null)
         {
         }
 
-        public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+        public RelayCommand(Action<T> execute, Predicate<T>? canExecute)
         {
             m_execute = execute ?? throw new ArgumentNullException(nameof(execute));
             m_canExecute = canExecute;

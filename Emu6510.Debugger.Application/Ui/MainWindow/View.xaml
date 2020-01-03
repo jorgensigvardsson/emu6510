@@ -3,13 +3,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Emu6510.Debugger.Application"
+        xmlns:local="clr-namespace:Emu6510.Debugger.Application.Ui.MainWindow"
+        xmlns:code="clr-namespace:Emu6510.Debugger.Application.Ui.CodeView"
+        xmlns:processor="clr-namespace:Emu6510.Debugger.Application.Ui.ProcessorView"
         mc:Ignorable="d"
         Title="6510 Debugger"
         d:DesignHeight="600"
         d:DesignWidth="800"
-        DataContext="{Binding Source={StaticResource RootDataContext}, Path=MainWindowViewModel}">
+        d:DataContext ="{d:DesignInstance {x:Type local:DesignViewModel}, IsDesignTimeCreatable=True}">
     <Grid>
-        <Label Content="{Binding Label}"></Label>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <code:View DataContext="{Binding Code}"
+                   d:DataContext="{d:DesignInstance {x:Type code:DesignViewModel}, IsDesignTimeCreatable=True}"
+                   Margin="5 2"/>
+        <Grid Grid.Column="1">
+            <processor:View DataContext="{Binding Processor}"
+                            d:DataContext="{d:DesignInstance {x:Type processor:DesignViewModel}, IsDesignTimeCreatable=True}"
+                            VerticalAlignment="Top"
+                            Margin="0 2 5 2"/>
+        </Grid>
     </Grid>
 </Window>
