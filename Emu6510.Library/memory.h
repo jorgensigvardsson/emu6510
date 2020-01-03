@@ -1,14 +1,17 @@
 #pragma once
 #include <vector>
+#include "bits.h"
 
 namespace emu6510 {
 	class memory {
 		std::vector<uint8_t> m_buffer;
 		
 	public:
-		memory(int size) {
-			m_buffer.resize(size);
+		memory() {
+			m_buffer.resize(memory_size);
 		}
+
+		size_t size() const { return m_buffer.size(); }
 
 		uint8_t& operator[](int index) {
 			return m_buffer[index];

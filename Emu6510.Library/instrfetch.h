@@ -5,7 +5,7 @@
 
 namespace emu6510 {
 	class memory;
-	API instruction& fetch(cpu& cpu, memory& memory);
+	LIBRARY_API instruction& fetch(cpu& cpu, memory& memory);
 
 	class bad_instruction : public std::exception {
 	public:

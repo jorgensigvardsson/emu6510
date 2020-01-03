@@ -2,11 +2,10 @@
 
 #include "../Emu6510.Library/memory.h"
 #include "../Emu6510.Library/cpu.h"
-#include "../Emu6510.Library/bits.h"
 #include "../Emu6510.Library/instrfetch.h"
 
 inline emu6510::memory make_memory() {
-	return emu6510::memory(emu6510::memory_size);
+	return emu6510::memory();
 }
 
 inline void run_one_instruction(emu6510::cpu& cpu, emu6510::memory& memory) {

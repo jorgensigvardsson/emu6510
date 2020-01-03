@@ -20,7 +20,7 @@ void load_application(emu6510::memory& memory) {
 
 int main()
 {
-	auto memory = emu6510::memory(64 * 1024);
+	auto memory = emu6510::memory();
 	load_application(memory);
 	
 	auto cpu = emu6510::cpu{};
