@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Emu6510.Debugger.Application.Annotations;
 using Emu6510.Debugger.Application.Bridge;
 
 namespace Emu6510.Debugger.Application.Ui.CodeView
@@ -11,7 +10,7 @@ namespace Emu6510.Debugger.Application.Ui.CodeView
         private IDebugger? m_debugger;
         private ObservableCollection<Instruction> m_instructions = new ObservableCollection<Instruction>();
 
-        public ViewModel([NotNull] IInstructionDecoder instructionDecoder)
+        public ViewModel(IInstructionDecoder instructionDecoder)
         {
             m_instructionDecoder = instructionDecoder ?? throw new ArgumentNullException(nameof(instructionDecoder));
         }

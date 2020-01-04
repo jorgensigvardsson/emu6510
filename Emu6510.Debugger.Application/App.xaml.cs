@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using Autofac;
+using IContainer = Autofac.IContainer;
 
 namespace Emu6510.Debugger.Application
 {
@@ -14,9 +15,12 @@ namespace Emu6510.Debugger.Application
         {
             if (!IsInDesignModeStatic)
             {
+                IContainer container = null!;
                 var builder = new ContainerBuilder();
                 builder.RegisterModule<AutofacModule>();
-                var container = builder.Build();
+                builder.RegisterInstance(new ResolverProxy(new Lazy<IContainer>(() => container)))
+                       .As<IResolverProxy>();
+                container = builder.Build();
 
                 var mainWindow = container.Resolve<Ui.MainWindow.View>();
                 mainWindow.DataContext = container.Resolve<Ui.MainWindow.IViewModel>();

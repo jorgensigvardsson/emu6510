@@ -38,6 +38,11 @@ namespace Emu6510.Debugger.Application.Bridge
             DbgDestroy(m_debugger);
         }
 
+        public void LoadProgram(ushort offset, byte[] program)
+        {
+            throw new NotImplementedException();
+        }
+
         public ReadOnlySpan<byte> MemoryView
         {
             get

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using Autofac;
+﻿using Autofac;
 
 namespace Emu6510.Debugger.Application.Ui
 {
@@ -18,6 +17,14 @@ namespace Emu6510.Debugger.Application.Ui
 
             builder.RegisterType<ProcessorView.ViewModel>()
                    .As<ProcessorView.IViewModel>();
+
+            builder.RegisterType<OffsetDialog.ViewModel>()
+                   .As<OffsetDialog.IViewModel>();
+            builder.RegisterType<OffsetDialog.View>();
+
+            builder.RegisterType<Infrastructure.DialogService>()
+                   .As<Infrastructure.IDialogService>()
+                   .SingleInstance();
         }
     }
 }
