@@ -1,13 +1,13 @@
 ﻿using Autofac;
 
-namespace Emu6510.Debugger.Application
+namespace Emu6510.Debugger.Application.Bridge
 {
     public class AutofacModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule<Ui.AutofacModule>();
-            builder.RegisterModule<Bridge.AutofacModule>();
+            builder.RegisterType<Debugger>()
+                   .As<IDebugger>();
         }
     }
 }

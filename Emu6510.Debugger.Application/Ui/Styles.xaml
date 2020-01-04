@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Emu6510.Debugger.Application.Ui"
+                    xmlns:code="clr-namespace:Emu6510.Debugger.Application.Ui.CodeView"
+                    xmlns:mainWindow="clr-namespace:Emu6510.Debugger.Application.Ui.MainWindow">
+    <Style TargetType="{x:Type code:View}">
+        <Setter Property="Background" Value="White"/>
+    </Style>
+    <Style TargetType="{x:Type mainWindow:View}">
+        <Setter Property="Background" Value="#F6F6F6"/>
+    </Style>
+</ResourceDictionary>

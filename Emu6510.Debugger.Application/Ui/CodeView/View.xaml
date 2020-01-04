@@ -8,28 +8,22 @@
              d:DesignHeight="200"
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance {x:Type local:DesignViewModel}, IsDesignTimeCreatable=True}">
-    <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                  VerticalScrollBarVisibility="Auto">
-        <ItemsControl ItemsSource="{Binding Instructions}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type local:Instruction}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Address, StringFormat=0x{0:X4}}"/>
-                        <TextBlock Margin="10 0 0 0"
-                                   Text="{Binding HexRepresentation}"
-                                   Width="80"
-                                   Foreground="DimGray"/>
-                        <TextBlock Margin="10 0 0 0"
-                                   Text="{Binding JumpLabel}"
-                                   Width="80"
-                                   Foreground="Black"/>
-                        <TextBlock Margin="10 0 0 0"
-                                   Text="{Binding Mnemonics}"
-                                   Width="200"
-                                   Foreground="DarkBlue"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
+    <ListView ItemsSource="{Binding Instructions}" BorderThickness="0">
+        <ListView.Resources>
+            <Style x:Key="{x:Type ListViewItem}" TargetType="{x:Type ListViewItem}">
+                <Setter Property="FontFamily" Value="Consolas"/>
+            </Style>
+            <Style x:Key="{x:Type GridViewColumnHeader}" TargetType="{x:Type GridViewColumnHeader}">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </Style>
+        </ListView.Resources>
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Address" Width="55" DisplayMemberBinding="{Binding Address, StringFormat=0x{0:X4}}" />
+                <GridViewColumn Header="Hex" Width="225" DisplayMemberBinding="{Binding HexRepresentation}" />
+                <GridViewColumn Header="Label" Width="150" DisplayMemberBinding="{Binding JumpLabel}" />
+                <GridViewColumn Header="Mnemonics" Width="455" DisplayMemberBinding="{Binding Mnemonics}" />
+            </GridView>
+        </ListView.View>
+    </ListView>
 </UserControl>

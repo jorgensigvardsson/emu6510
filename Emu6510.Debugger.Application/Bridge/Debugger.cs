@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Emu6510.Debugger.Application.Bridge
 {
-    public class Debugger : IDisposable
+    public class Debugger : IDisposable, IDebugger
     {
         private readonly IntPtr m_debugger;
         private readonly unsafe byte* m_memoryView;
@@ -38,6 +36,83 @@ namespace Emu6510.Debugger.Application.Bridge
         private void ReleaseUnmanagedResources()
         {
             DbgDestroy(m_debugger);
+        }
+
+        public ReadOnlySpan<byte> MemoryView
+        {
+            get
+            {
+                unsafe
+                {
+                    return new Span<byte>(m_memoryView, (int) MemorySize);
+                }
+            }
+        }
+
+        public byte RegisterA
+        {
+            get
+            {
+                var error = DbgGetRegisters(m_debugger, out var a, out _, out _, out _, out _, out _);
+                if (error != ErrorCode.Success)
+                    throw new ApplicationException($"DbgGetRegisters error code: {error}");
+                return a;
+            }
+        }
+
+        public byte RegisterX
+        {
+            get
+            {
+                var error = DbgGetRegisters(m_debugger, out _, out var x, out _, out _, out _, out _);
+                if (error != ErrorCode.Success)
+                    throw new ApplicationException($"DbgGetRegisters error code: {error}");
+                return x;
+            }
+        }
+
+        public byte RegisterY
+        {
+            get
+            {
+                var error = DbgGetRegisters(m_debugger, out _, out _, out var y, out _, out _, out _);
+                if (error != ErrorCode.Success)
+                    throw new ApplicationException($"DbgGetRegisters error code: {error}");
+                return y;
+            }
+        }
+
+        public ushort RegisterPc
+        {
+            get
+            {
+                var error = DbgGetRegisters(m_debugger, out _, out _, out _, out var pc, out _, out _);
+                if (error != ErrorCode.Success)
+                    throw new ApplicationException($"DbgGetRegisters error code: {error}");
+                return pc;
+            }
+        }
+
+        public byte RegisterS
+        {
+            get
+            {
+                var error = DbgGetRegisters(m_debugger, out _, out _, out _, out _, out var s, out _);
+                if (error != ErrorCode.Success)
+                    throw new ApplicationException($"DbgGetRegisters error code: {error}");
+                return s;
+            }
+        }
+
+        public byte RegisterP
+        {
+            get
+            {
+                var error = DbgGetRegisters(m_debugger, out _, out _, out _, out _, out _, out var p);
+                if (error != ErrorCode.Success)
+                    throw new ApplicationException($"DbgGetRegisters error code: {error}");
+                return p;
+            }
         }
 
         public void Dispose()
@@ -81,7 +156,11 @@ namespace Emu6510.Debugger.Application.Bridge
         [DllImport("Emu6510.Debugger.dll", EntryPoint = "dbg_step_one_instruction", SetLastError = false)]
         [return: MarshalAs(UnmanagedType.I4)]
         static extern ErrorCode DbgStepOneInstruction(IntPtr debugger);
-        
+
+        [DllImport("Emu6510.Debugger.dll", EntryPoint = "dbg_get_registers", SetLastError = false)]
+        [return: MarshalAs(UnmanagedType.I4)]
+        static extern ErrorCode DbgGetRegisters(IntPtr debugger, out byte a, out byte x, out byte y, out ushort pc, out byte s, out byte p);
+
         [DllImport("Emu6510.Debugger.dll", EntryPoint = "dbg_destroy", SetLastError = false)]
         static extern void DbgDestroy(IntPtr debugger);
         #endregion

@@ -16,14 +16,18 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <code:View DataContext="{Binding Code}"
-                   d:DataContext="{d:DesignInstance {x:Type code:DesignViewModel}, IsDesignTimeCreatable=True}"
-                   Margin="5 2"/>
+        <Border Margin="3" BorderThickness="1" BorderBrush="DarkGray">
+            <code:View DataContext="{Binding Code}"
+                       d:DataContext="{d:DesignInstance {x:Type code:DesignViewModel}, IsDesignTimeCreatable=True}"
+                       Margin="2"/>
+        </Border>
         <Grid Grid.Column="1">
-            <processor:View DataContext="{Binding Processor}"
-                            d:DataContext="{d:DesignInstance {x:Type processor:DesignViewModel}, IsDesignTimeCreatable=True}"
-                            VerticalAlignment="Top"
-                            Margin="0 2 5 2"/>
+            <Border Margin="0 3 3 3" BorderThickness="1" BorderBrush="DarkGray">
+                <processor:View DataContext="{Binding Processor}"
+                                d:DataContext="{d:DesignInstance {x:Type processor:DesignViewModel}, IsDesignTimeCreatable=True}"
+                                VerticalAlignment="Top"
+                                Margin="2"/>
+            </Border>
         </Grid>
     </Grid>
 </Window>

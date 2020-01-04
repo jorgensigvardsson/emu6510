@@ -13,7 +13,9 @@ dbg_result dbg_create(debugger_t* debugger) {
 	*debugger = nullptr;
 
 	try {
-		*debugger = new emu6510::debugger();
+		const auto dbg = new emu6510::debugger();
+		dbg->cpu.sp = 0xFF;
+		*debugger = dbg;
 		return DBG_E_SUCCESS;
 	} catch(...) {
 		return DBG_E_GEN_FAILURE;
@@ -62,6 +64,25 @@ dbg_result dbg_step_one_instruction(debugger_t debugger) {
 	} catch (...) {
 		return DBG_E_GEN_FAILURE;
 	}
+}
+
+dbg_result dbg_get_registers(debugger_t debugger, uint8_t* a, uint8_t* x, uint8_t* y, uint16_t* pc, uint8_t* s, uint8_t* p) {
+	CHECK_NULL_ARG(debugger);
+	CHECK_NULL_ARG(a);
+	CHECK_NULL_ARG(x);
+	CHECK_NULL_ARG(y);
+	CHECK_NULL_ARG(pc);
+	CHECK_NULL_ARG(s);
+	CHECK_NULL_ARG(p);
+
+	auto dbg = static_cast<emu6510::debugger*>(debugger);
+	*a = dbg->cpu.a;
+	*x = dbg->cpu.x;
+	*y = dbg->cpu.y;
+	*pc = dbg->cpu.pc;
+	*s = dbg->cpu.sp;
+	*p = dbg->cpu.status;
+	return DBG_E_SUCCESS;
 }
 
 void dbg_destroy(debugger_t debugger) {
