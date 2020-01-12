@@ -20,3 +20,11 @@ TEST(instruction_nop, immediate_addressing_works) {
 	const auto restOfMemory = std::vector<uint8_t>(std::begin(result.memory) + 1, std::end(result.memory));
 	EXPECT_EQ(zeroVector, restOfMemory);
 }
+
+TEST(instruction_nop, decodes_to_string) {
+	const auto result = decode_one_instruction([](auto& /*cpu*/, auto& memory) {
+		memory[0x0000] = opcodes::nop;
+	});
+
+	EXPECT_EQ("NOP", result);
+}

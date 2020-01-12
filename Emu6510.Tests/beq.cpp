@@ -5,6 +5,28 @@
 
 using namespace emu6510;
 
+TEST(instruction_beq, positive_decodes_to_string) {
+	const auto result = decode_one_instruction([](auto& cpu, auto& memory) {
+		cpu.pc = 0x100;
+		cpu.status = status::zero;
+		memory[0x0100] = opcodes::beq;
+		memory[0x0101] = 0x10;
+	});
+
+	EXPECT_EQ("BEQ $10", result);
+}
+
+TEST(instruction_beq, negative_decodes_to_string) {
+	const auto result = decode_one_instruction([](auto& cpu, auto& memory) {
+		cpu.pc = 0x100;
+		cpu.status = status::zero;
+		memory[0x0100] = opcodes::beq;
+		memory[0x0101] = 0xF6;
+	});
+
+	EXPECT_EQ("BEQ -$0A", result);
+}
+
 TEST(instruction_beq, zero_flag_set_jump_forward_works) {
 	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
 		cpu.pc = 0x100;

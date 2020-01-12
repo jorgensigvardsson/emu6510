@@ -160,6 +160,7 @@
     <ClInclude Include="beq.h" />
     <ClInclude Include="bits.h" />
     <ClInclude Include="cpu.h" />
+    <ClInclude Include="decode_internal.h" />
     <ClInclude Include="inc.h" />
     <ClInclude Include="instrfetch.h" />
     <ClInclude Include="instruction.h" />

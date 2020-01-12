@@ -5,13 +5,23 @@
 
 using namespace emu6510;
 
-TEST(instruction_lda, immediate_addressing_works) {
-	const auto result = run_one_instruction([](auto& /*cpu*/, auto& memory) {
+namespace {
+	auto lda_immediate_addressing_setup = setup_function([](auto& /*cpu*/, auto& memory) {
 		memory[0x0000] = opcodes::lda_immediate;
 		memory[0x0001] = 0x12;
 	});
+}
+
+TEST(instruction_lda, immediate_addressing_works) {
+	const auto result = run_one_instruction(lda_immediate_addressing_setup);
 
 	EXPECT_EQ(0x12ui8, result.cpu.a);
+}
+
+TEST(instruction_lda, immediate_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(lda_immediate_addressing_setup);
+
+	EXPECT_EQ("LDA #$12", result);
 }
 
 TEST(instruction_lda, zp_addressing_works) {

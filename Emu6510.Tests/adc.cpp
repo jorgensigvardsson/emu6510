@@ -5,29 +5,21 @@
 
 using namespace emu6510;
 
-TEST(instruction_adc, immediate_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
+namespace {
+	auto adc_immediate_addressing_setup = setup_function([](auto& cpu, auto& memory) {
 		cpu.a = 1;
 		memory[0x0000] = opcodes::adc_immediate;
 		memory[0x0001] = 0x12;
 	});
 
-	EXPECT_EQ(0x13ui8, result.cpu.a);
-}
-
-TEST(instruction_adc, zp_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
+	auto adc_zp_addressing_setup = setup_function([](auto& cpu, auto& memory) {
 		cpu.a = 1;
 		memory[0x0000] = opcodes::adc_zp;
 		memory[0x0001] = 0xA0;
 		memory[0x00A0] = 0x12;
 	});
 
-	EXPECT_EQ(0x13ui8, result.cpu.a);
-}
-
-TEST(instruction_adc, zp_and_x_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
+	auto adc_zp_and_x_addressing_setup = setup_function([](auto& cpu, auto& memory) {
 		cpu.a = 1;
 		cpu.x = 1;
 		memory[0x0000] = opcodes::adc_zp_x;
@@ -35,11 +27,7 @@ TEST(instruction_adc, zp_and_x_addressing_works) {
 		memory[0x00A1] = 0x12;
 	});
 
-	EXPECT_EQ(0x13ui8, result.cpu.a);
-}
-
-TEST(instruction_adc, abs_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
+	auto adc_abs_addressing_setup = setup_function([](auto& cpu, auto& memory) {
 		cpu.a = 1;
 		memory[0x0000] = opcodes::adc_abs;
 		memory[0x0001] = 0x00;
@@ -47,11 +35,7 @@ TEST(instruction_adc, abs_addressing_works) {
 		memory[0x0A00] = 0x12;
 	});
 
-	EXPECT_EQ(0x13ui8, result.cpu.a);
-}
-
-TEST(instruction_adc, abs_and_x_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
+	auto adc_abs_and_x_addressing_setup = setup_function([](auto& cpu, auto& memory) {
 		cpu.a = 1;
 		cpu.x = 1;
 		memory[0x0000] = opcodes::adc_abs_x;
@@ -60,11 +44,7 @@ TEST(instruction_adc, abs_and_x_addressing_works) {
 		memory[0x0A01] = 0x12;
 	});
 
-	EXPECT_EQ(0x13ui8, result.cpu.a);
-}
-
-TEST(instruction_adc, abs_and_y_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
+	auto adc_abs_and_y_addressing_setup = setup_function([](auto& cpu, auto& memory) {
 		cpu.a = 1;
 		cpu.y = 1;
 		memory[0x0000] = opcodes::adc_abs_y;
@@ -73,11 +53,7 @@ TEST(instruction_adc, abs_and_y_addressing_works) {
 		memory[0x0A01] = 0x12;
 	});
 
-	EXPECT_EQ(0x13ui8, result.cpu.a);
-}
-
-TEST(instruction_adc, indirect_and_x_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
+	auto adc_indirect_and_x_addressing_setup = setup_function([](auto& cpu, auto& memory) {
 		cpu.a = 1;
 		cpu.x = 4;
 		memory[0x0000] = opcodes::adc_ind_x;
@@ -87,11 +63,7 @@ TEST(instruction_adc, indirect_and_x_addressing_works) {
 		memory[0x8000] = 0x12;
 	});
 
-	EXPECT_EQ(0x13ui8, result.cpu.a);
-}
-
-TEST(instruction_adc, indirect_and_y_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
+	auto adc_indirect_and_y_addressing_setup = setup_function([](auto& cpu, auto& memory) {
 		cpu.a = 1;
 		cpu.y = 4;
 		memory[0x0000] = opcodes::adc_ind_y;
@@ -100,8 +72,102 @@ TEST(instruction_adc, indirect_and_y_addressing_works) {
 		memory[0x0011] = 0x80;
 		memory[0x8004] = 0x12;
 	});
+}
+
+TEST(instruction_adc, immediate_addressing_works) {
+	const auto result = run_one_instruction(adc_immediate_addressing_setup);
 
 	EXPECT_EQ(0x13ui8, result.cpu.a);
+}
+
+TEST(instruction_adc, immediate_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(adc_immediate_addressing_setup);
+
+	EXPECT_EQ("ADC #$12", result);
+}
+
+TEST(instruction_adc, zp_addressing_works) {
+	const auto result = run_one_instruction(adc_zp_addressing_setup);
+
+	EXPECT_EQ(0x13ui8, result.cpu.a);
+}
+
+TEST(instruction_adc, zp_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(adc_zp_addressing_setup);
+
+	EXPECT_EQ("ADC $A0", result);
+}
+
+TEST(instruction_adc, zp_and_x_addressing_works) {
+	const auto result = run_one_instruction(adc_zp_and_x_addressing_setup);
+
+	EXPECT_EQ(0x13ui8, result.cpu.a);
+}
+
+TEST(instruction_adc, zp_and_x_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(adc_zp_and_x_addressing_setup);
+
+	EXPECT_EQ("ADC $A0, X", result);
+}
+
+TEST(instruction_adc, abs_addressing_works) {
+	const auto result = run_one_instruction(adc_abs_addressing_setup);
+
+	EXPECT_EQ(0x13ui8, result.cpu.a);
+}
+
+TEST(instruction_adc, abs_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(adc_abs_addressing_setup);
+
+	EXPECT_EQ("ADC $0A00", result);
+}
+
+TEST(instruction_adc, abs_and_x_addressing_works) {
+	const auto result = run_one_instruction(adc_abs_and_x_addressing_setup);
+
+	EXPECT_EQ(0x13ui8, result.cpu.a);
+}
+
+TEST(instruction_adc, abs_and_x_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(adc_abs_and_x_addressing_setup);
+
+	EXPECT_EQ("ADC $0A00, X", result);
+}
+
+TEST(instruction_adc, abs_and_y_addressing_works) {
+	const auto result = run_one_instruction(adc_abs_and_y_addressing_setup);
+
+	EXPECT_EQ(0x13ui8, result.cpu.a);
+}
+
+TEST(instruction_adc, abs_and_y_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(adc_abs_and_y_addressing_setup);
+
+	EXPECT_EQ("ADC $0A00, Y", result);
+}
+
+TEST(instruction_adc, indirect_and_x_addressing_works) {
+	const auto result = run_one_instruction(adc_indirect_and_x_addressing_setup);
+
+	EXPECT_EQ(0x13ui8, result.cpu.a);
+}
+
+TEST(instruction_adc, indirect_and_x_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(adc_indirect_and_x_addressing_setup);
+
+	EXPECT_EQ("ADC ($02, X)", result);
+}
+
+TEST(instruction_adc, indirect_and_y_addressing_works) {
+	const auto result = run_one_instruction(adc_indirect_and_y_addressing_setup);
+
+	EXPECT_EQ(0x13ui8, result.cpu.a);
+}
+
+TEST(instruction_adc, indirect_and_y_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(adc_indirect_and_y_addressing_setup);
+
+	EXPECT_EQ("ADC ($10), Y", result);
 }
 
 TEST(instruction_adc, zero_flag_is_set_on_zero) {

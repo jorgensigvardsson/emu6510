@@ -13,5 +13,8 @@
 #include <utility>
 #include <vector>
 #include <cstdint>
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 #endif //PCH_H
