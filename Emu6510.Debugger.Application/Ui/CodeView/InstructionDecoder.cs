@@ -26,9 +26,9 @@ namespace Emu6510.Debugger.Application.Ui.CodeView
 
             var bytes = new byte[MaxUnknownRange];
             var i = 0;
-            for (; i < memoryView.Length && i < MaxUnknownRange; ++i)
+            for (; i + ptr < memoryView.Length && i < MaxUnknownRange; ++i)
             {
-                bytes[i] = memoryView[i];
+                bytes[i] = memoryView[i + ptr];
                 ++ptr;
             }
 

@@ -15,7 +15,7 @@ namespace Emu6510.Debugger.Application.Ui.Infrastructure
             m_dialogViews[typeof(OffsetDialog.IViewModel)] = typeof(OffsetDialog.View);
         }
 
-        public TViewModel Show<TViewModel>(Action<TViewModel> init)
+        public TViewModel Show<TViewModel>(Action<TViewModel> init) where TViewModel : IDialogViewModel
         {
             var viewModel = m_resolverProxy.Resolve<TViewModel>();
             init(viewModel);
@@ -25,7 +25,7 @@ namespace Emu6510.Debugger.Application.Ui.Infrastructure
             return viewModel;
         }
 
-        public TViewModel Show<TViewModel>()
+        public TViewModel Show<TViewModel>() where TViewModel : IDialogViewModel
         {
             var viewModel = m_resolverProxy.Resolve<TViewModel>();
             var dialog = (Window)m_resolverProxy.Resolve(m_dialogViews[typeof(TViewModel)]);

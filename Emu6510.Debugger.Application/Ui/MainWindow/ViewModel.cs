@@ -45,10 +45,13 @@ namespace Emu6510.Debugger.Application.Ui.MainWindow
             var program = File.ReadAllBytes(dialog.FileName);
 
             var result = m_dialogService.Show<OffsetDialog.IViewModel>();
+            if (result.Cancelled)
+                return;
 
             try
             {
                 m_debugger.LoadProgram(result.Offset, program);
+                Code.Refresh();
             }
             catch (Exception ex)
             {

@@ -21,7 +21,7 @@ namespace Emu6510.Debugger.Application.Ui.CodeView
             set
             {
                 m_debugger = value;
-                GenerateInstructions();
+                Refresh();
                 OnPropertyChanged();
             }
         }
@@ -36,13 +36,18 @@ namespace Emu6510.Debugger.Application.Ui.CodeView
             }
         }
 
+        public void Refresh()
+        {
+            GenerateInstructions();
+        }
+
         private void GenerateInstructions()
         {
             Instructions.Clear();
             if (m_debugger == null)
                 return;
 
-            m_instructions = m_instructionDecoder.DecodeInstructions(m_debugger.MemoryView);
+            Instructions = m_instructionDecoder.DecodeInstructions(m_debugger.MemoryView);
         }
     }
 }

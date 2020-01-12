@@ -57,7 +57,7 @@ dbg_result dbg_step_one_instruction(debugger_t debugger) {
 	auto dbg = static_cast<emu6510::debugger*>(debugger);
 
 	try {
-		dbg->step();
+		fetch(dbg->cpu, dbg->memory).execute(dbg->cpu, dbg->memory);
 		return DBG_E_SUCCESS;
 	} catch (emu6510::bad_instruction&) {
 		return DBG_E_BAD_INSTRUCTION;
@@ -82,6 +82,29 @@ dbg_result dbg_get_registers(debugger_t debugger, uint8_t* a, uint8_t* x, uint8_
 	*pc = dbg->cpu.pc;
 	*s = dbg->cpu.sp;
 	*p = dbg->cpu.status;
+	return DBG_E_SUCCESS;
+}
+
+dbg_result dbg_decode(debugger_t debugger, /* in/out */ uint16_t* pc, /* out */ decoded_instruction* di) {
+	CHECK_NULL_ARG(debugger);
+	CHECK_NULL_ARG(pc);
+	CHECK_NULL_ARG(di);
+
+	auto dbg = static_cast<emu6510::debugger*>(debugger);
+	auto cpu = dbg->cpu;
+	cpu.pc = *pc;
+
+	uint16_t start;
+	uint16_t len;
+	
+	const auto& instruction = fetch(cpu, dbg->memory, &start, &len);
+	const auto decoded_op = instruction.decode(cpu, dbg->memory);
+
+	*pc = cpu.pc;
+	strcpy_s(di->decoded_op, sizeof(di->decoded_op), decoded_op.c_str());
+	di->op_len = len;
+	di->op_start_addr = start;
+
 	return DBG_E_SUCCESS;
 }
 

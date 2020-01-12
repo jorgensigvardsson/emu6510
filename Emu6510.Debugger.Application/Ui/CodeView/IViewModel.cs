@@ -7,5 +7,6 @@ namespace Emu6510.Debugger.Application.Ui.CodeView
     {
         IDebugger? Debugger { set; get; }
         ObservableCollection<Instruction> Instructions { get; }
+        void Refresh();
     }
 }

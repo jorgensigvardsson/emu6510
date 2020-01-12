@@ -4,6 +4,7 @@
 #include "instructions.h"
 #include "cpu.h"
 #include "opcodes.h"
+#include "invalid_op.h"
 
 namespace {
 	using namespace emu6510;
@@ -40,12 +41,26 @@ namespace {
 	OP_ABS_Y(lda);
 	OP_IND_X(lda);
 	OP_IND_Y(lda);
+	invalid_op invalid_op_instance;
 }
 
 namespace emu6510 {
+	instruction& fetch(cpu& cpu, memory& memory, uint16_t* addr_start, uint16_t* addr_len) {
+		const auto start = cpu.pc;
+		auto& instruction = fetch(cpu, memory);
+
+		if (addr_start)
+			*addr_start = start;
+
+		if (addr_len)
+			*addr_len = cpu.pc - start;
+
+		return instruction;
+	}
+	
 #define CASE_OP_CODE(opcode) case opcodes::opcode: \
 	return opcode##_instance
-	
+		
 	instruction& fetch(cpu& cpu, memory& memory) {
 		const auto opcode = read_ip_byte(cpu, memory);
 		switch (opcode) {
@@ -72,7 +87,7 @@ namespace emu6510 {
 			CASE_OP_CODE(lda_ind_x);
 			CASE_OP_CODE(lda_ind_y);
 		default:
-			throw bad_instruction { cpu.pc - 1 };
+			return invalid_op_instance;
 		}
 	}
 }

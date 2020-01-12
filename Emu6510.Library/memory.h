@@ -21,7 +21,9 @@ namespace emu6510 {
 
 		uint16_t read_word(uint16_t location) const {
 			const auto lobyte = m_buffer[location];
+#pragma warning ( disable : 26451 )
 			const auto hibyte = m_buffer[1 + location];
+#pragma warning ( enable : 26451 )
 
 			return hibyte << 8 | lobyte;
 		}

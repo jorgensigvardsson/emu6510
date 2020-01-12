@@ -165,6 +165,7 @@
     <ClInclude Include="instrfetch.h" />
     <ClInclude Include="instruction.h" />
     <ClInclude Include="instructions.h" />
+    <ClInclude Include="invalid_op.h" />
     <ClInclude Include="lda.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="nop.h" />
@@ -173,7 +174,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="instrfetch.cpp" />
+    <ClCompile Include="instrfetch.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NoListing</AssemblerOutput>
+    </ClCompile>
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

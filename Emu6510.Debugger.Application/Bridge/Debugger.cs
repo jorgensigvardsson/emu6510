@@ -40,7 +40,10 @@ namespace Emu6510.Debugger.Application.Bridge
 
         public void LoadProgram(ushort offset, byte[] program)
         {
-            throw new NotImplementedException();
+            if (program.Length > ushort.MaxValue)
+                throw new ArgumentOutOfRangeException(nameof(program), $"byte array too large, max length is {ushort.MaxValue}");
+
+            DbgLoadProgram(m_debugger, offset, program, (ushort) program.Length);
         }
 
         public ReadOnlySpan<byte> MemoryView
@@ -134,6 +137,15 @@ namespace Emu6510.Debugger.Application.Bridge
         #region P/Invoke
 
         public const uint MemorySize = 64 * 1024;
+        public const int MaxDecodedOpLen = 16;
+
+        public struct DecodedInstruction
+        {
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxDecodedOpLen)]
+            public byte[] DecodedOp;
+            public ushort OpStartAddr;
+            public ushort OpLen;
+        }
 
         // ReSharper disable InconsistentNaming
         public enum ErrorCode
@@ -165,6 +177,10 @@ namespace Emu6510.Debugger.Application.Bridge
         [DllImport("Emu6510.Debugger.dll", EntryPoint = "dbg_get_registers", SetLastError = false)]
         [return: MarshalAs(UnmanagedType.I4)]
         static extern ErrorCode DbgGetRegisters(IntPtr debugger, out byte a, out byte x, out byte y, out ushort pc, out byte s, out byte p);
+
+        [DllImport("Emu6510.Debugger.dll", EntryPoint = "dbg_decode", SetLastError = false)]
+        [return: MarshalAs(UnmanagedType.I4)]
+        static extern ErrorCode DbgDecode(IntPtr debugger, ref ushort pc, out DecodedInstruction decodedInstruction);
 
         [DllImport("Emu6510.Debugger.dll", EntryPoint = "dbg_destroy", SetLastError = false)]
         static extern void DbgDestroy(IntPtr debugger);

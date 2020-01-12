@@ -53,5 +53,10 @@ namespace Emu6510.Debugger.Application.Ui.CodeView
 
             }
         );
+
+        public void Refresh()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -72,6 +72,9 @@
     <ClInclude Include="decode_internal.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
+    <ClInclude Include="invalid_op.h">
+      <Filter>Header Files\instructions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

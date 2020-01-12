@@ -17,10 +17,13 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right">
-            <Button Content="OK" Width="40"/>
+            <Button Content="OK"
+                    Width="40"
+                    Click="OnOk"/>
             <Button Content="Cancel" 
                     Margin="5 0 0 0"
-                    Width="40"/>
+                    Width="40"
+                    Click="OnCancel"/>
         </StackPanel>
     </StackPanel>
 </Window>

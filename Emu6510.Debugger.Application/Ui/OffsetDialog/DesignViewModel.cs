@@ -3,5 +3,6 @@
     public class DesignViewModel : IViewModel
     {
         public ushort Offset { get; set; } = 0xc000;
+        public bool Cancelled { get; set; }
     }
 }
