@@ -23,7 +23,7 @@ namespace emu6510 {
 			const auto lobyte = m_buffer[location];
 #pragma warning ( disable : 26451 )
 			const auto hibyte = m_buffer[1 + location];
-#pragma warning ( enable : 26451 )
+#pragma warning ( default : 26451 )
 
 			return hibyte << 8 | lobyte;
 		}

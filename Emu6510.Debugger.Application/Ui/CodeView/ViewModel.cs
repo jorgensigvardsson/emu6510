@@ -47,7 +47,7 @@ namespace Emu6510.Debugger.Application.Ui.CodeView
             if (m_debugger == null)
                 return;
 
-            Instructions = m_instructionDecoder.DecodeInstructions(m_debugger.MemoryView);
+            Instructions = m_instructionDecoder.DecodeInstructions(m_debugger);
         }
     }
 }

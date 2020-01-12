@@ -12,5 +12,6 @@ namespace Emu6510.Debugger.Application.Bridge
         ushort RegisterPc { get; }
         byte RegisterS { get; }
         byte RegisterP { get; }
+        Instruction Decode(ushort address);
     }
 }

@@ -94,15 +94,37 @@ dbg_result dbg_decode(debugger_t debugger, /* in/out */ uint16_t* pc, /* out */ 
 	auto cpu = dbg->cpu;
 	cpu.pc = *pc;
 
-	uint16_t start;
-	uint16_t len;
-	
+	uint16_t start = *pc;
+	uint16_t len = 0;
+
 	const auto& instruction = fetch(cpu, dbg->memory, &start, &len);
-	const auto decoded_op = instruction.decode(cpu, dbg->memory);
+	if (is_valid(instruction)) {
+		const auto decoded_op = instruction.decode(cpu, dbg->memory);
+
+		*pc = cpu.pc;
+		strcpy_s(di->decoded_op, sizeof di->decoded_op, decoded_op.c_str());
+		di->op_len = len;
+		di->op_start_addr = start;
+
+		return DBG_E_SUCCESS;
+	}
+
+	// Well, it's just a memory block, so let's continue until we hit a valid instruction
+	bool finished = false;
+	int invalid_len = 1;
+	while (!finished) {
+		const auto& invalid_instruction = fetch(cpu, dbg->memory);
+		if (is_valid(invalid_instruction))
+			finished = true;
+
+		++invalid_len;
+		if (static_cast<int>(start) + invalid_len == 65536)
+			finished = true;
+	}
 
 	*pc = cpu.pc;
-	strcpy_s(di->decoded_op, sizeof(di->decoded_op), decoded_op.c_str());
-	di->op_len = len;
+	memset(di->decoded_op, 0, sizeof di->decoded_op);
+	di->op_len = invalid_len;
 	di->op_start_addr = start;
 
 	return DBG_E_SUCCESS;

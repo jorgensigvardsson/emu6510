@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using Emu6510.Debugger.Application.Bridge;
 
 namespace Emu6510.Debugger.Application.Ui.CodeView
 {
     public interface IInstructionDecoder
     {
-        ObservableCollection<Instruction> DecodeInstructions(ReadOnlySpan<byte> memoryView);
+        ObservableCollection<Instruction> DecodeInstructions(IDebugger debugger);
     }
 }

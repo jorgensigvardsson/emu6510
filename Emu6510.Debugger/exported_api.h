@@ -13,11 +13,14 @@ constexpr dbg_result DBG_E_GEN_FAILURE = 666;
 
 constexpr int MAX_DECODED_OP_LEN = 16;
 
+#pragma pack(push, 4)
 struct decoded_instruction {
+	bool is_valid_op;
 	char decoded_op[MAX_DECODED_OP_LEN];
 	uint16_t op_start_addr;
-	uint16_t op_len;
+	uint32_t op_len;
 };
+#pragma pack(pop)
 
 extern "C" {
 	DEBUGGER_API dbg_result dbg_create(debugger_t* debugger);

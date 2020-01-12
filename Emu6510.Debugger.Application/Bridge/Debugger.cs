@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Emu6510.Debugger.Application.Bridge
 {
@@ -123,6 +125,21 @@ namespace Emu6510.Debugger.Application.Bridge
             }
         }
 
+        public Instruction Decode(ushort address)
+        {
+            var pc = address;
+            var error = DbgDecode(m_debugger, ref pc, out var decodedInstruction);
+            if (error != ErrorCode.Success)
+                throw new ApplicationException($"DbgDecode error code: {error}");
+
+            return new Instruction
+            {
+                Mnemonics = Encoding.UTF8.GetString(decodedInstruction.DecodedOp.TakeWhile(c => c != 0).ToArray()),
+                Address = address,
+                Bytes = MemoryView.Slice(address, (int) decodedInstruction.OpLen)
+            };
+        }
+
         public void Dispose()
         {
             ReleaseUnmanagedResources();
@@ -139,12 +156,17 @@ namespace Emu6510.Debugger.Application.Bridge
         public const uint MemorySize = 64 * 1024;
         public const int MaxDecodedOpLen = 16;
 
+        [StructLayout(LayoutKind.Sequential, Pack = 4)]
         public struct DecodedInstruction
         {
+            [MarshalAs(UnmanagedType.U1)]
+            public bool IsValidOp;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxDecodedOpLen)]
             public byte[] DecodedOp;
+            [MarshalAs(UnmanagedType.U2)]
             public ushort OpStartAddr;
-            public ushort OpLen;
+            [MarshalAs(UnmanagedType.U4)]
+            public uint OpLen;
         }
 
         // ReSharper disable InconsistentNaming

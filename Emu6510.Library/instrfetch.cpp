@@ -45,7 +45,7 @@ namespace {
 }
 
 namespace emu6510 {
-	instruction& fetch(cpu& cpu, memory& memory, uint16_t* addr_start, uint16_t* addr_len) {
+	instruction& fetch(cpu& cpu, memory& memory, uint16_t* addr_start, uint16_t* addr_len) noexcept {
 		const auto start = cpu.pc;
 		auto& instruction = fetch(cpu, memory);
 
@@ -61,7 +61,7 @@ namespace emu6510 {
 #define CASE_OP_CODE(opcode) case opcodes::opcode: \
 	return opcode##_instance
 		
-	instruction& fetch(cpu& cpu, memory& memory) {
+	instruction& fetch(cpu& cpu, memory& memory) noexcept {
 		const auto opcode = read_ip_byte(cpu, memory);
 		switch (opcode) {
 			CASE_OP_CODE(adc_immediate);
@@ -90,4 +90,12 @@ namespace emu6510 {
 			return invalid_op_instance;
 		}
 	}
+
+	bool is_valid(const instruction& instruction) noexcept {
+		if (&instruction == &invalid_op_instance)
+			return false;
+		
+		return dynamic_cast<const invalid_op*>(&instruction) == nullptr;
+	}
+
 }
