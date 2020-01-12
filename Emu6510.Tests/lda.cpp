@@ -10,6 +10,60 @@ namespace {
 		memory[0x0000] = opcodes::lda_immediate;
 		memory[0x0001] = 0x12;
 	});
+
+	auto lda_zp_addressing_setup = setup_function([](auto& /*cpu*/, auto& memory) {
+		memory[0x0000] = opcodes::lda_zp;
+		memory[0x0001] = 0xA0;
+		memory[0x00A0] = 0x12;
+	});
+
+	auto lda_zp_and_x_addressing_setup = setup_function([](auto& cpu, auto& memory) {
+		cpu.x = 1;
+		memory[0x0000] = opcodes::lda_zp_x;
+		memory[0x0001] = 0xA0;
+		memory[0x00A1] = 0x12;
+	});
+
+	auto lda_abs_addressing_setup = setup_function([](auto& /*cpu*/, auto& memory) {
+		memory[0x0000] = opcodes::lda_abs;
+		memory[0x0001] = 0x00;
+		memory[0x0002] = 0x0A;
+		memory[0x0A00] = 0x12;
+	});
+
+	auto lda_abs_and_x_addressing_setup = setup_function([](auto& cpu, auto& memory) {
+		cpu.x = 1;
+		memory[0x0000] = opcodes::lda_abs_x;
+		memory[0x0001] = 0x00;
+		memory[0x0002] = 0x0A;
+		memory[0x0A01] = 0x12;
+	});
+	
+	auto lda_abs_and_y_addressing_setup = setup_function([](auto& cpu, auto& memory) {
+		cpu.y = 1;
+		memory[0x0000] = opcodes::lda_abs_y;
+		memory[0x0001] = 0x00;
+		memory[0x0002] = 0x0A;
+		memory[0x0A01] = 0x12;
+	});
+
+	auto lda_indirect_and_x_addressing_setup = setup_function([](auto& cpu, auto& memory) {
+		cpu.x = 4;
+		memory[0x0000] = opcodes::lda_ind_x;
+		memory[0x0001] = 0x02;
+		memory[0x0006] = 0x00;
+		memory[0x0007] = 0x80;
+		memory[0x8000] = 0x12;
+	});
+
+	auto lda_indirect_and_y_addressing_setup = setup_function([](auto& cpu, auto& memory) {
+		cpu.y = 4;
+		memory[0x0000] = opcodes::lda_ind_y;
+		memory[0x0001] = 0x10;
+		memory[0x0010] = 0x00;
+		memory[0x0011] = 0x80;
+		memory[0x8004] = 0x12;
+	});
 }
 
 TEST(instruction_lda, immediate_addressing_works) {
@@ -25,85 +79,87 @@ TEST(instruction_lda, immediate_addressing_decodes_to_string) {
 }
 
 TEST(instruction_lda, zp_addressing_works) {
-	const auto result = run_one_instruction([](auto& /*cpu*/, auto& memory) {
-		memory[0x0000] = opcodes::lda_zp;
-		memory[0x0001] = 0xA0;
-		memory[0x00A0] = 0x12;
-	});
+	const auto result = run_one_instruction(lda_zp_addressing_setup);
 
 	EXPECT_EQ(0x12ui8, result.cpu.a);
+}
+
+TEST(instruction_lda, zp_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(lda_zp_addressing_setup);
+
+	EXPECT_EQ("LDA $A0", result);
 }
 
 TEST(instruction_lda, zp_and_x_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
-		cpu.x = 1;
-		memory[0x0000] = opcodes::lda_zp_x;
-		memory[0x0001] = 0xA0;
-		memory[0x00A1] = 0x12;
-	});
+	const auto result = run_one_instruction(lda_zp_and_x_addressing_setup);
 
 	EXPECT_EQ(0x12ui8, result.cpu.a);
+}
+
+TEST(instruction_lda, zp_and_x_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(lda_zp_and_x_addressing_setup);
+
+	EXPECT_EQ("LDA $A0, X", result);
 }
 
 TEST(instruction_lda, abs_addressing_works) {
-	const auto result = run_one_instruction([](auto& /*cpu*/, auto& memory) {
-		memory[0x0000] = opcodes::lda_abs;
-		memory[0x0001] = 0x00;
-		memory[0x0002] = 0x0A;
-		memory[0x0A00] = 0x12;
-	});
+	const auto result = run_one_instruction(lda_abs_addressing_setup);
 
 	EXPECT_EQ(0x12ui8, result.cpu.a);
+}
+
+TEST(instruction_lda, abs_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(lda_abs_addressing_setup);
+
+	EXPECT_EQ("LDA $0A00", result);
 }
 
 TEST(instruction_lda, abs_and_x_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
-		cpu.x = 1;
-		memory[0x0000] = opcodes::lda_abs_x;
-		memory[0x0001] = 0x00;
-		memory[0x0002] = 0x0A;
-		memory[0x0A01] = 0x12;
-	});
+	const auto result = run_one_instruction(lda_abs_and_x_addressing_setup);
 
 	EXPECT_EQ(0x12ui8, result.cpu.a);
+}
+
+TEST(instruction_lda, abs_and_x_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(lda_abs_and_x_addressing_setup);
+
+	EXPECT_EQ("LDA $0A00, X", result);
 }
 
 TEST(instruction_lda, abs_and_y_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
-		cpu.y = 1;
-		memory[0x0000] = opcodes::lda_abs_y;
-		memory[0x0001] = 0x00;
-		memory[0x0002] = 0x0A;
-		memory[0x0A01] = 0x12;
-	});
+	const auto result = run_one_instruction(lda_abs_and_y_addressing_setup);
 
 	EXPECT_EQ(0x12ui8, result.cpu.a);
+}
+
+TEST(instruction_lda, abs_and_y_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(lda_abs_and_y_addressing_setup);
+
+	EXPECT_EQ("LDA $0A00, Y", result);
 }
 
 TEST(instruction_lda, indirect_and_x_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
-		cpu.x = 4;
-		memory[0x0000] = opcodes::lda_ind_x;
-		memory[0x0001] = 0x02;
-		memory[0x0006] = 0x00;
-		memory[0x0007] = 0x80;
-		memory[0x8000] = 0x12;
-	});
+	const auto result = run_one_instruction(lda_indirect_and_x_addressing_setup);
 
 	EXPECT_EQ(0x12ui8, result.cpu.a);
 }
 
+TEST(instruction_lda, indirect_and_x_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(lda_indirect_and_x_addressing_setup);
+
+	EXPECT_EQ("LDA ($02, X)", result);
+}
+
 TEST(instruction_lda, indirect_and_y_addressing_works) {
-	const auto result = run_one_instruction([](auto& cpu, auto& memory) {
-		cpu.y = 4;
-		memory[0x0000] = opcodes::lda_ind_y;
-		memory[0x0001] = 0x10;
-		memory[0x0010] = 0x00;
-		memory[0x0011] = 0x80;
-		memory[0x8004] = 0x12;
-	});
+	const auto result = run_one_instruction(lda_indirect_and_y_addressing_setup);
 
 	EXPECT_EQ(0x12ui8, result.cpu.a);
+}
+
+TEST(instruction_lda, indirect_and_y_addressing_decodes_to_string) {
+	const auto result = decode_one_instruction(lda_indirect_and_y_addressing_setup);
+
+	EXPECT_EQ("LDA ($10), Y", result);
 }
 
 TEST(instruction_lda, zero_flag_is_set_on_zero) {
